@@ -1,0 +1,196 @@
+{
+  "metrics": {
+    "dataset_version": "v1",
+    "provider": "deterministic mock evaluation",
+    "dataset_size": {
+      "agreement_cases": 5,
+      "routing_cases": 3,
+      "task_cases": 3,
+      "homes": 3,
+      "documents": 3
+    },
+    "retrieval_hit_rate": 1.0,
+    "rag_answer_correctness": 1.0,
+    "no_retrieval_answer_correctness": 0.2,
+    "citation_validity": 1.0,
+    "citation_support": 1.0,
+    "routing_accuracy": 1.0,
+    "single_agent_task_completion": 0.3333333333333333,
+    "multi_agent_task_completion": 1.0,
+    "budget_constraint_violations": 0,
+    "budget_expected_match": true,
+    "cancel_preserved_plan": true,
+    "duplicate_confirmation_idempotent": true,
+    "workspace_isolated": true,
+    "median_rag_latency_ms": 2.37,
+    "median_no_retrieval_latency_ms": 0.24,
+    "provider_tokens": null,
+    "estimated_cost_usd": null
+  },
+  "agreement_cases": [
+    {
+      "id": "deposit",
+      "rag_correct": true,
+      "no_retrieval_correct": false,
+      "retrieval_hit": true,
+      "citation_valid": true,
+      "citation_supported": true,
+      "rag_latency_ms": 4.63,
+      "no_retrieval_latency_ms": 0.36,
+      "rag_status": "answered",
+      "citation_count": 1
+    },
+    {
+      "id": "notice",
+      "rag_correct": true,
+      "no_retrieval_correct": false,
+      "retrieval_hit": true,
+      "citation_valid": true,
+      "citation_supported": true,
+      "rag_latency_ms": 2.37,
+      "no_retrieval_latency_ms": 0.24,
+      "rag_status": "answered",
+      "citation_count": 1
+    },
+    {
+      "id": "unsupported",
+      "rag_correct": true,
+      "no_retrieval_correct": true,
+      "retrieval_hit": null,
+      "citation_valid": true,
+      "citation_supported": null,
+      "rag_latency_ms": 2.08,
+      "no_retrieval_latency_ms": 0.23,
+      "rag_status": "unsupported",
+      "citation_count": 0
+    },
+    {
+      "id": "conflict",
+      "rag_correct": true,
+      "no_retrieval_correct": false,
+      "retrieval_hit": true,
+      "citation_valid": true,
+      "citation_supported": true,
+      "rag_latency_ms": 3.6,
+      "no_retrieval_latency_ms": 0.44,
+      "rag_status": "partial",
+      "citation_count": 2
+    },
+    {
+      "id": "injection",
+      "rag_correct": true,
+      "no_retrieval_correct": false,
+      "retrieval_hit": true,
+      "citation_valid": true,
+      "citation_supported": true,
+      "rag_latency_ms": 2.08,
+      "no_retrieval_latency_ms": 0.24,
+      "rag_status": "answered",
+      "citation_count": 1
+    }
+  ],
+  "routing_cases": [
+    {
+      "id": "housing_only",
+      "expected": [
+        "housing"
+      ],
+      "actual": [
+        "housing"
+      ],
+      "correct": true,
+      "latency_ms": 5.57,
+      "token_estimate": 5973,
+      "provider_tokens": null,
+      "estimated_cost_usd": null
+    },
+    {
+      "id": "document_only",
+      "expected": [
+        "document"
+      ],
+      "actual": [
+        "document"
+      ],
+      "correct": true,
+      "latency_ms": 5.03,
+      "token_estimate": 3894,
+      "provider_tokens": null,
+      "estimated_cost_usd": null
+    },
+    {
+      "id": "combined",
+      "expected": [
+        "housing",
+        "document",
+        "planning"
+      ],
+      "actual": [
+        "housing",
+        "document",
+        "planning"
+      ],
+      "correct": true,
+      "latency_ms": 16.34,
+      "token_estimate": 27865,
+      "provider_tokens": null,
+      "estimated_cost_usd": null
+    }
+  ],
+  "task_cases": [
+    {
+      "id": "housing_task",
+      "required": [
+        "housing"
+      ],
+      "single_agents": [
+        "housing"
+      ],
+      "single_completed": true,
+      "multi_agents": [
+        "housing"
+      ],
+      "multi_completed": true,
+      "single_latency_ms": 2.42,
+      "multi_latency_ms": 3.88
+    },
+    {
+      "id": "housing_document_task",
+      "required": [
+        "housing",
+        "document"
+      ],
+      "single_agents": [
+        "housing"
+      ],
+      "single_completed": false,
+      "multi_agents": [
+        "housing",
+        "document"
+      ],
+      "multi_completed": true,
+      "single_latency_ms": 2.16,
+      "multi_latency_ms": 9.17
+    },
+    {
+      "id": "full_task",
+      "required": [
+        "housing",
+        "document",
+        "planning"
+      ],
+      "single_agents": [
+        "housing"
+      ],
+      "single_completed": false,
+      "multi_agents": [
+        "housing",
+        "document",
+        "planning"
+      ],
+      "multi_completed": true,
+      "single_latency_ms": 2.6,
+      "multi_latency_ms": 14.46
+    }
+  ]
+}

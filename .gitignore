@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+!.env.production.example
+node_modules/
+.next/
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+*.db
+private_uploads/
+coverage/
+*.tsbuildinfo
+test-results/
+playwright-report/

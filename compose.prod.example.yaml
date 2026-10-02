@@ -1,0 +1,57 @@
+# Example only. Put HTTPS/TLS and request-size limits at a trusted reverse proxy.
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: movewise
+      POSTGRES_USER: movewise
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set in deployment environment}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U movewise"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+  api:
+    build: ./backend
+    env_file: ./backend/.env.production
+    command: ["sh","-c","alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    volumes:
+      - private_uploads:/var/lib/movewise/uploads
+    depends_on:
+      db: {condition: service_healthy}
+    expose: ["8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/ready',timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  document-worker:
+    build: ./backend
+    env_file: ./backend/.env.production
+    command: ["python","-m","app.services.document_worker"]
+    volumes:
+      - private_uploads:/var/lib/movewise/uploads
+    depends_on:
+      api: {condition: service_healthy}
+  assistant-worker:
+    build: ./backend
+    env_file: ./backend/.env.production
+    command: ["python","-m","app.services.assistant_worker"]
+    volumes:
+      - private_uploads:/var/lib/movewise/uploads
+    depends_on:
+      api: {condition: service_healthy}
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?set public API URL}
+        NEXT_PUBLIC_AUTH_MODE: oidc
+    expose: ["3000"]
+    depends_on:
+      api: {condition: service_healthy}
+volumes:
+  postgres_data:
+  private_uploads:
